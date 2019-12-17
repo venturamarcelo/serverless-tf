@@ -14,7 +14,7 @@ terraform {
 resource "aws_sns_topic" "serverless_updates" {
   name = "serverless-updates"
   tags = {
-    Environment  = "${var.environment}"
+    Environment  = "${terraform.workspace}"
   }
 }
 resource "aws_sns_topic_policy" "serverless_updates_policy" {
@@ -27,7 +27,7 @@ module "uno" {
   source        = "./modules/function"
   function_name = "uno"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
-  environment   = "${var.environment}"
+  environment   = "${terraform.workspace}"
   filter_policy = <<EOF
 {
   "Event": ["Trigger Uno"]
@@ -39,7 +39,7 @@ module "dos" {
   source        = "./modules/function"
   function_name = "dos"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
-  environment   = "${var.environment}"
+  environment   = "${terraform.workspace}"
   filter_policy = <<EOF
 {
   "Event": ["Trigger Dos"]
@@ -51,7 +51,7 @@ module "tres" {
   source        = "./modules/function"
   function_name = "tres"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
-  environment   = "${var.environment}"
+  environment   = "${terraform.workspace}"
   filter_policy = <<EOF
 {
   "Event": ["Trigger Tres"]

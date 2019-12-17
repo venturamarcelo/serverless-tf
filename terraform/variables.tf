@@ -1,7 +1,3 @@
-variable "environment" {
-  default     = "dev"
-  description = "Environment"
-}
 
 data "aws_iam_policy_document" "sns_upload" {
   policy_id = "snssqssns"
