@@ -51,6 +51,36 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
+    promote:
+      docker:
+        - image: hashicorp/terraform:light
+      steps:
+        - checkout
+        - run:
+            name: tf format
+            command: |
+              cd terraform/
+              terraform fmt
+        - run: 
+            name: tf init
+            command: |
+              cd terraform/
+              terraform init
+        - run: 
+            name: tf qa workspace
+            command: |
+              cd terraform/
+              terraform workspace select qa || terraform workspace new qa 
+        - run:
+            name: tf plan
+            command: |
+              cd terraform/
+              terraform plan -out=plan.tfplan
+        - run:
+            name: tf apply 
+            command: |
+              cd terraform/
+              terraform apply --auto-approve 
 workflows:
   version: 2
   build_and_deploy:
@@ -62,3 +92,7 @@ workflows:
           filters:
             branches:
               only: master
+      - promote:
+          type: approval
+          requires:
+            - deploy
