@@ -1,0 +1,64 @@
+version: 2
+
+jobs:
+    build:
+      docker:
+        - image: hashicorp/terraform:light
+      steps:
+        - checkout
+        - run:
+            name: tf format
+            command: |
+              cd terraform/
+              terraform fmt
+        - run: 
+            name: tf init
+            command: |
+              cd terraform/
+              terraform init
+        - run:
+            name: tf plan
+            command: |
+              cd terraform/
+              terraform plan -out=plan.tfplan
+    deploy:
+      docker:
+        - image: hashicorp/terraform:light
+      steps:
+        - checkout
+        - run:
+            name: tf format
+            command: |
+              cd terraform/
+              terraform fmt
+        - run: 
+            name: tf init
+            command: |
+              cd terraform/
+              terraform init
+        - run: 
+            name: tf dev workspace
+            command: |
+              cd terraform/
+              terraform workspace select dev || terraform workspace new dev 
+        - run:
+            name: tf plan
+            command: |
+              cd terraform/
+              terraform plan -out=plan.tfplan
+        - run:
+            name: tf apply 
+            command: |
+              cd terraform/
+              terraform apply --auto-approve
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
