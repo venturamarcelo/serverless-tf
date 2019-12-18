@@ -51,7 +51,7 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
-    promote:
+    deploy_qa:
       docker:
         - image: hashicorp/terraform:light
       steps:
@@ -96,3 +96,6 @@ workflows:
           type: approval
           requires:
             - deploy
+      - deploy_qa:
+          requires:
+            - promote
