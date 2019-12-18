@@ -12,7 +12,7 @@ terraform {
 
 # Main SNS Topic
 resource "aws_sns_topic" "serverless_updates" {
-  name = "serverless-updates"
+  name = "serverless-updates-${terraform.workspace}"
   tags = {
     Environment  = "${terraform.workspace}"
   }
