@@ -52,8 +52,10 @@ jobs:
               cd terraform/
               terraform apply --auto-approve
         - run:
-            name: setup
+            name: version
             command: |
+              apt-get update
+              apt-get install python-pip
               pip install --upgrade bump2version
               bump2version --tag-name 'dev-v{new_version}' patch
     deploy_qa:
@@ -87,8 +89,10 @@ jobs:
               cd terraform/
               terraform apply --auto-approve
         - run:
-            name: setup
+            name: version
             command: |
+              apt-get update
+              apt-get install python-pip
               pip install --upgrade bump2version
               bump2version --tag-name 'staging-v{new_version}' minor 
 workflows:
