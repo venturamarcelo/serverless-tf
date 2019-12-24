@@ -55,7 +55,7 @@ jobs:
             name: version
             command: |
               apk update
-              apk add python-pip
+              apk add python
               pip install --upgrade bump2version
               bump2version --tag-name 'dev-v{new_version}' patch
     deploy_qa:
@@ -92,7 +92,7 @@ jobs:
             name: version
             command: |
               apk update
-              apk add python-pip
+              apk add python
               pip install --upgrade bump2version
               bump2version --tag-name 'staging-v{new_version}' minor 
 workflows:
