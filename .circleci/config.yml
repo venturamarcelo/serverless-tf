@@ -54,8 +54,8 @@ jobs:
         - run:
             name: version
             command: |
-              apt-get update
-              apt-get install python-pip
+              apk update
+              apk add python-pip
               pip install --upgrade bump2version
               bump2version --tag-name 'dev-v{new_version}' patch
     deploy_qa:
@@ -91,8 +91,8 @@ jobs:
         - run:
             name: version
             command: |
-              apt-get update
-              apt-get install python-pip
+              apk update
+              apk add python-pip
               pip install --upgrade bump2version
               bump2version --tag-name 'staging-v{new_version}' minor 
 workflows:
