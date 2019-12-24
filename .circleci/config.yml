@@ -51,6 +51,11 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
+        - run:
+            name: setup
+            command: |
+              pip install --upgrade bump2version
+              bump2version --tag-name 'dev-v{new_version}' patch
     deploy_qa:
       docker:
         - image: hashicorp/terraform:light
@@ -80,7 +85,12 @@ jobs:
             name: tf apply 
             command: |
               cd terraform/
-              terraform apply --auto-approve 
+              terraform apply --auto-approve
+        - run:
+            name: setup
+            command: |
+              pip install --upgrade bump2version
+              bump2version --tag-name 'staging-v{new_version}' minor 
 workflows:
   version: 2
   build_and_deploy:
@@ -92,7 +102,7 @@ workflows:
           filters:
             branches:
               only: master
-      - promote:
+      - promote?:
           type: approval
           requires:
             - deploy
