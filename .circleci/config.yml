@@ -33,6 +33,7 @@ jobs:
               git config user.name "Marcelo Ventura"
               pip install --upgrade bump2version
               bump2version --tag-name 'dev-v{new_version}' patch
+              git push
               git push --tags
     deploy:
       docker:
