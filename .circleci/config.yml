@@ -29,6 +29,8 @@ jobs:
         - run:
             name: setup
             command: |
+              git config user.email "marceloventura@outlook.com"
+              git config user.name "Marcelo Ventura"
               pip install --upgrade bump2version
               bump2version --tag-name 'dev-v{new_version}' patch
     deploy:
