@@ -21,6 +21,16 @@ jobs:
             command: |
               cd terraform/
               terraform plan -out=plan.tfplan
+    setup-dev:
+      docker:
+        - image: python:latest
+      steps:
+        - checkout
+        - run:
+            name: setup
+            command: |
+              pip install --upgrade bump2version
+              bump2version --tag-name 'dev-v{new_version}' patch
     deploy:
       docker:
         - image: hashicorp/terraform:light
@@ -51,12 +61,6 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
-        - run:
-            name: version
-            command: |
-              apk add --update py-pip
-              pip install --upgrade bump2version
-              bump2version --tag-name 'dev-v{new_version}' patch
     deploy_qa:
       docker:
         - image: hashicorp/terraform:light
@@ -99,6 +103,12 @@ workflows:
     jobs:
       - build
       - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - setup-dev:
           requires:
             - build
           filters:
