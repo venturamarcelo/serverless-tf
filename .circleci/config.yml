@@ -131,6 +131,9 @@ jobs:
               terraform apply --auto-approve
 
     destroy:
+      docker:
+        - image: hashicorp/terraform:light
+      steps:
         - checkout
         - run: 
             name: tf init
@@ -165,7 +168,7 @@ workflows:
 
   build_and_release:
     jobs:
-      - build:
+      - build:  
           filters:
             branches:
               only: master
