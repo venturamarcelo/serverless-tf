@@ -129,7 +129,7 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
-              
+
     destroy:
         - checkout
         - run: 
@@ -165,7 +165,7 @@ workflows:
 
   build_and_release:
     jobs:
-      - build
+      - build:
           filters:
             branches:
               only: master
