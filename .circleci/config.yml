@@ -141,6 +141,11 @@ jobs:
               cd terraform/
               terraform init
         - run: 
+            name: tf dev workspace
+            command: |
+              cd terraform/
+              terraform workspace select $CIRCLE_BRANCH || terraform workspace new $CIRCLE_BRANCH 
+        - run: 
             name: tf destroy
             command: |
               cd terraform/
@@ -154,7 +159,10 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore: master
       - deploy_feature:
           requires:
             - build
