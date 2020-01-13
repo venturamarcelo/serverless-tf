@@ -21,6 +21,7 @@ jobs:
             command: |
               cd terraform/
               terraform plan -out=plan.tfplan
+
     versioning:
       docker:
         - image: python:latest
@@ -35,7 +36,39 @@ jobs:
               bump2version minor
               git push
               git push --tags
-    deploy:
+
+    deploy_feature:
+      docker:
+        - image: hashicorp/terraform:light
+      steps:
+        - checkout
+        - run:
+            name: tf format
+            command: |
+              cd terraform/
+              terraform fmt
+        - run: 
+            name: tf init
+            command: |
+              cd terraform/
+              terraform init
+        - run: 
+            name: tf dev workspace
+            command: |
+              cd terraform/
+              terraform workspace select $CIRCLE_BRANCH || terraform workspace new $CIRCLE_BRANCH 
+        - run:
+            name: tf plan
+            command: |
+              cd terraform/
+              terraform plan -out=plan.tfplan
+        - run:
+            name: tf apply 
+            command: |
+              cd terraform/
+              terraform apply --auto-approve
+
+    deploy_dev:
       docker:
         - image: hashicorp/terraform:light
       steps:
@@ -65,6 +98,7 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
+              
     deploy_qa:
       docker:
         - image: hashicorp/terraform:light
@@ -95,24 +129,59 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
+              
+    destroy:
+        - checkout
+        - run: 
+            name: tf init
+            command: |
+              cd terraform/
+              terraform init
+        - run: 
+            name: tf destroy
+            command: |
+              cd terraform/
+              terraform destroy
+        - run:
+            name: tf workspace delete
+            command: |
+              cd terraform/
+              terraform workspace delete $CIRCLE_BRANCH 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build
-      - deploy:
+      - deploy_feature:
+          requires:
+            - build
+      - approve_delete:
+          type: approval
+          requires:
+            - deploy_feature
+      - destroy:
+          requires:
+            - approve_delete
+
+  build_and_release:
+    jobs:
+      - build
+          filters:
+            branches:
+              only: master
+      - deploy_dev:
           requires:
             - build
           filters:
             branches:
               only: master
-      - approve:
+      - approve_promotion:
           type: approval
           requires:
-            - deploy
+            - deploy_dev
       - deploy_qa:
           requires:
-            - approve
+            - approve_promotion
       - versioning:
           requires:
-            - approve
+            - approve_promotion
