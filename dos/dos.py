@@ -25,7 +25,7 @@ def handler(event, context):
     account_id = context.invoked_function_arn.split(":")[4]
     # print("Received event: "+ json.dumps(event, indent=2)) # TODO log:DEBUG
     
-    print("Dos!") # TODO log:INFO
+    print("Dos!!") # TODO log:INFO
 
     # Send Message
     snsTopic = "serverless-updates-" + ENVIRONMENT # sns topic name
