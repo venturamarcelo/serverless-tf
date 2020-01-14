@@ -68,37 +68,6 @@ jobs:
               cd terraform/
               terraform apply --auto-approve
 
-    deploy_dev:
-      docker:
-        - image: hashicorp/terraform:light
-      steps:
-        - checkout
-        - run:
-            name: tf format
-            command: |
-              cd terraform/
-              terraform fmt
-        - run: 
-            name: tf init
-            command: |
-              cd terraform/
-              terraform init
-        - run: 
-            name: tf dev workspace
-            command: |
-              cd terraform/
-              terraform workspace select dev || terraform workspace new dev 
-        - run:
-            name: tf plan
-            command: |
-              cd terraform/
-              terraform plan -out=plan.tfplan
-        - run:
-            name: tf apply 
-            command: |
-              cd terraform/
-              terraform apply --auto-approve
-              
     deploy_qa:
       docker:
         - image: hashicorp/terraform:light
@@ -129,6 +98,37 @@ jobs:
             command: |
               cd terraform/
               terraform apply --auto-approve
+              
+    deploy_prod:
+      docker:
+        - image: hashicorp/terraform:light
+      steps:
+        - checkout
+        - run:
+            name: tf format
+            command: |
+              cd terraform/
+              terraform fmt
+        - run: 
+            name: tf init
+            command: |
+              cd terraform/
+              terraform init
+        - run: 
+            name: tf select workspace
+            command: |
+              cd terraform/
+              terraform workspace select prod || terraform workspace new prod 
+        - run:
+            name: tf plan
+            command: |
+              cd terraform/
+              terraform plan -out=plan.tfplan
+        - run:
+            name: tf apply 
+            command: |
+              cd terraform/
+              terraform apply --auto-approve
 
     destroy:
       docker:
@@ -141,7 +141,7 @@ jobs:
               cd terraform/
               terraform init
         - run: 
-            name: tf dev workspace
+            name: tf select workspace
             command: |
               cd terraform/
               terraform workspace select $CIRCLE_BRANCH || terraform workspace new $CIRCLE_BRANCH 
@@ -181,17 +181,14 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy_dev:
+      - deploy_qa:
           requires:
             - build
-          filters:
-            branches:
-              only: master
       - approve_promotion:
           type: approval
           requires:
-            - deploy_dev
-      - deploy_qa:
+            - deploy_qa
+      - deploy_prod:
           requires:
             - approve_promotion
       - versioning:
