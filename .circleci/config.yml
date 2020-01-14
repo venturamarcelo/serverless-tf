@@ -154,7 +154,7 @@ jobs:
             name: tf workspace delete
             command: |
               cd terraform/
-              terrafrom workspace select default
+              terraform workspace select default
               terraform workspace delete $CIRCLE_BRANCH 
 workflows:
   version: 2
