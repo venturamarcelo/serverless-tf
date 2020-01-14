@@ -12,9 +12,9 @@ terraform {
 
 # Main SNS Topic
 resource "aws_sns_topic" "serverless_updates" {
-  name = "serverless-updates-${terraform.workspace}"
+  name = "serverless-updates${local.suffix}"
   tags = {
-    Environment  = "${terraform.workspace}"
+    Environment  = "${local.environment}"
   }
 }
 resource "aws_sns_topic_policy" "serverless_updates_policy" {
@@ -25,9 +25,10 @@ resource "aws_sns_topic_policy" "serverless_updates_policy" {
 # Lambda functions
 module "uno" {
   source        = "./modules/function"
-  function_name = "uno"
+  function_name = "uno${local.suffix}"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
-  environment   = "${terraform.workspace}"
+  environment   = "${local.environment}"
+  suffix        = "${local.suffix}"
   filter_policy = <<EOF
 {
   "Event": ["Trigger Uno"]
@@ -37,9 +38,10 @@ EOF
 
 module "dos" {
   source        = "./modules/function"
-  function_name = "dos"
+  function_name = "dos${local.suffix}"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
-  environment   = "${terraform.workspace}"
+  environment   = "${local.environment}"
+  suffix        = "${local.suffix}"
   filter_policy = <<EOF
 {
   "Event": ["Trigger Dos"]
@@ -49,9 +51,10 @@ EOF
 
 module "tres" {
   source        = "./modules/function"
-  function_name = "tres"
+  function_name = "tres${local.suffix}"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
-  environment   = "${terraform.workspace}"
+  environment   = "${local.environment}"
+  suffix        = "${local.suffix}"
   filter_policy = <<EOF
 {
   "Event": ["Trigger Tres"]

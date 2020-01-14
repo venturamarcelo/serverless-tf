@@ -15,6 +15,10 @@ variable "environment" {
   description = "Environment"
 }
 
+variable "suffix" {
+  description = "Change the resource name according to the environment"  
+}
+
 
 data "archive_file" "function" {
   type        = "zip"

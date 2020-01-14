@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_iam" {
-  name = "${var.function_name}-iam-${var.environment}"
+  name = "${var.function_name}-iam${var.suffix}"
 
   assume_role_policy = <<EOF
 {
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_policy" "lambda_iam_policy" {
-  name        = "${var.function_name}-iam-policy-${var.environment}"
+  name        = "${var.function_name}-iam-policy${var.suffix}"
   path        = "/"
   description = "IAM policy for a lambda function"
 
@@ -37,7 +37,7 @@ resource "aws_lambda_function" "lambda_function" {
   handler          = "${var.function_name}.handler"
   runtime          = "python3.6"
   filename         = "${data.archive_file.function.output_path}"
-  function_name    = "${var.function_name}-${var.environment}"
+  function_name    = "${var.function_name}${var.suffix}"
   source_code_hash = "${data.archive_file.function.output_base64sha256}"
   timeout          = 90
   tags = {
@@ -51,7 +51,7 @@ resource "aws_lambda_function" "lambda_function" {
 }
 
 resource "aws_sqs_queue" "function_updates_queue" {
-  name                       = "${var.function_name}-updates-queue-${var.environment}"
+  name                       = "${var.function_name}-updates-queue${var.suffix}"
   visibility_timeout_seconds = 90
   tags = {
     Environment  = "${var.environment}"
