@@ -43,6 +43,11 @@ resource "aws_lambda_function" "lambda_function" {
   tags = {
     Environment  = "${var.environment}"
   }
+  environment {
+    variables = {
+      ENVIRONMENT = "${var.environment}"
+    }
+  }
 }
 
 resource "aws_sqs_queue" "function_updates_queue" {

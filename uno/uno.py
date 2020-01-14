@@ -3,6 +3,7 @@ import boto3
 import os
 
 AWS_REGION = os.environ['AWS_REGION']
+ENVIRONMENT = os.environ['ENVIRONMENT']
 
 def sendMessage(account_id, snsTopic, message):
     # Create an SNS client
@@ -27,7 +28,7 @@ def handler(event, context):
     print("Uno!!!) # TODO log:INFO
 
     # Send Message
-    snsTopic = "serverless-updates" # sns topic name
+    snsTopic = "serverless-updates-"+ENVIRONMENT # sns topic name
     message = "Sending message from "+ os.environ['AWS_LAMBDA_FUNCTION_NAME']
     sendMessage(account_id, snsTopic, message)
     return
