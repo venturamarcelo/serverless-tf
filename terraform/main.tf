@@ -25,7 +25,7 @@ resource "aws_sns_topic_policy" "serverless_updates_policy" {
 # Lambda functions
 module "uno" {
   source        = "./modules/function"
-  function_name = "uno${local.suffix}"
+  function_name = "uno"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
   environment   = "${local.environment}"
   suffix        = "${local.suffix}"
@@ -38,7 +38,7 @@ EOF
 
 module "dos" {
   source        = "./modules/function"
-  function_name = "dos${local.suffix}"
+  function_name = "dos"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
   environment   = "${local.environment}"
   suffix        = "${local.suffix}"
@@ -51,7 +51,7 @@ EOF
 
 module "tres" {
   source        = "./modules/function"
-  function_name = "tres${local.suffix}"
+  function_name = "tres"
   sns_topic_arn = "${aws_sns_topic.serverless_updates.arn}"
   environment   = "${local.environment}"
   suffix        = "${local.suffix}"
