@@ -51,7 +51,7 @@ variable "workspace_to_environment_map" {
 
 locals {
   environment = "${lookup(var.workspace_to_environment_map, terraform.workspace, "dev")}"
-  suffix       = "${lookup(var.workspace_to_suffix_map, terraform.workspace, "-"+terraform.workspace)}"
+  suffix       = "${lookup(var.workspace_to_suffix_map, terraform.workspace, format("%s%s", "-", terraform.workspace))}"
 }
 
  
