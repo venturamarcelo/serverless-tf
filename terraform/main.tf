@@ -61,3 +61,11 @@ module "tres" {
 }
 EOF
 }
+
+# Database
+module "database" {
+  source = "./modules/database"
+  environment   = "${local.environment}"
+  suffix        = "${local.suffix}"
+  
+}
