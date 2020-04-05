@@ -1,5 +1,5 @@
 resource "aws_rds_cluster" "rds_cluster" {
-  cluster_identifier      = "${var.dbInstanceIdentifier}${local.cleansuffix}"
+  cluster_identifier      = "${var.dbInstanceIdentifier}-${local.cleansuffix}"
   engine                  = "${var.engine}"
   engine_mode             = "serverless"
   availability_zones      = ["us-west-2a", "us-west-2b", "us-west-2c"]
@@ -33,7 +33,17 @@ resource "aws_secretsmanager_secret_version" "db-secret-version" {
   "engine": "${var.engine}",
   "host": "${var.host}",
   "port": ${var.port},
-  "dbInstanceIdentifier": "${var.dbInstanceIdentifier}${local.cleansuffix}"
+  "dbInstanceIdentifier": "${var.dbInstanceIdentifier}-${local.cleansuffix}"
 }
 EOF
+}
+
+resource "null_resource" "setup_db" {
+  depends_on = ["aws_rds_cluster.rds_cluster"] #wait for the db to be ready
+  provisioner "local-exec" {
+    command = "modules/database/db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"
+    environment = {
+      PGPASSWORD = "${var.password}"
+    }
+  }
 }
