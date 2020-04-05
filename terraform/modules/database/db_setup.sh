@@ -6,4 +6,4 @@ HOST = $1
 DBNAME = $2
 USERNAME = $3
 
-psql -u $USERNAME -h HOST -d $DBNAME -f db_setup.sql
+psql -u $USERNAME -h HOST -d $DBNAME -f 'modules/database/db_setup.sql'
