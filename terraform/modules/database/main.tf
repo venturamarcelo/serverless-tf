@@ -41,7 +41,8 @@ EOF
 resource "null_resource" "setup_db" {
   depends_on = ["aws_rds_cluster.rds_cluster"] #wait for the db to be ready
   provisioner "local-exec" {
-    command = "./modules/database/db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"
+    command = "pwd"
+    #command = "./modules/database/db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"
     environment = {
       PGPASSWORD = "${var.password}"
     }
