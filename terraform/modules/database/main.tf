@@ -38,13 +38,3 @@ resource "aws_secretsmanager_secret_version" "db-secret-version" {
 EOF
 }
 
-resource "null_resource" "setup_db" {
-  depends_on = ["aws_rds_cluster.rds_cluster"] #wait for the db to be ready
-  provisioner "local-exec" {
-      working_dir = "$PWD/modules/database/"
-      command = "db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"
-      environment = {
-          PGPASSWORD = "${var.password}"
-        }
-    }
-}
