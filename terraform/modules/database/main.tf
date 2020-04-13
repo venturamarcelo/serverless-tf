@@ -9,7 +9,6 @@ resource "aws_rds_cluster" "rds_cluster" {
   backup_retention_period = 7
   preferred_backup_window = "07:00-09:00"
   skip_final_snapshot     = true
-  enable_http_endpoint    = true
   tags = {
     Environment  = "${var.environment}"
   }
@@ -38,3 +37,13 @@ resource "aws_secretsmanager_secret_version" "db-secret-version" {
 EOF
 }
 
+resource "null_resource" "setup_db" {	
+  depends_on = ["aws_rds_cluster.rds_cluster"] #wait for the db to be ready	
+  provisioner "local-exec" {	
+      working_dir = "modules/database/"	
+      command = "./db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"	
+      environment = {	
+          PGPASSWORD = "${var.password}"	
+        }	
+    }	
+}

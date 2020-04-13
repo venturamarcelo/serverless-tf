@@ -37,21 +37,21 @@ data "aws_iam_policy_document" "sns_upload" {
 variable "workspace_to_suffix_map" {
   type = "map"
   default = {
-    prod    = ""
-    qa      = "-qa"
+    prod = ""
+    qa   = "-qa"
   }
 }
 variable "workspace_to_environment_map" {
   type = "map"
   default = {
-    prod    = "prod"
-    qa      = "qa"
+    prod = "prod"
+    qa   = "qa"
   }
 }
 
 locals {
   environment = "${lookup(var.workspace_to_environment_map, terraform.workspace, "dev")}"
-  suffix       = "${lookup(var.workspace_to_suffix_map, terraform.workspace, format("%s%s", "-", terraform.workspace))}"
+  suffix      = "${lookup(var.workspace_to_suffix_map, terraform.workspace, format("%s%s", "-", terraform.workspace))}"
 }
 
  

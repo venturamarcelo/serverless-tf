@@ -1,5 +1,6 @@
 provider "aws" {
   region = "us-west-2"
+  version = "~> 2.44"
 }
 
 terraform {
@@ -14,7 +15,7 @@ terraform {
 resource "aws_sns_topic" "serverless_updates" {
   name = "serverless-updates${local.suffix}"
   tags = {
-    Environment  = "${local.environment}"
+    Environment = "${local.environment}"
   }
 }
 resource "aws_sns_topic_policy" "serverless_updates_policy" {
@@ -47,7 +48,7 @@ module "dos" {
   "Event": ["Trigger Dos"]
 }
 EOF
-} 
+}
 
 module "tres" {
   source        = "./modules/function"
@@ -64,8 +65,8 @@ EOF
 
 # Database
 module "database" {
-  source = "./modules/database"
-  environment   = "${local.environment}"
-  suffix        = "${local.suffix}"
-  
+  source      = "./modules/database"
+  environment = "${local.environment}"
+  suffix      = "${local.suffix}"
+
 }
