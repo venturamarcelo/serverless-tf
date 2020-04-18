@@ -1,9 +1,6 @@
 #!/bin/bash
 echo "installing psql"
-#yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-redhat10-10-2.noarch.rpm  
-#yum install postgresql10  
-
-uname -a
+apt-get install -y postgresql-client
 
 HOST=$1
 DBNAME=$2
