@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "installing psql"
-apt-get install -y postgresql-client
+#apt-get install -y postgresql-client
+apk add postgresql-client
 
 HOST=$1
 DBNAME=$2
