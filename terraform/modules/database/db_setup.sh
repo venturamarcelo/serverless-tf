@@ -4,4 +4,4 @@ echo "installing psql"
 apk add postgresql-client
 
 echo "starting process"
-psql -u $USERNAME -h HOST -d $DBNAME -a -f 'modules/database/db_setup.sql'
+psql -U $USERNAME -h HOST -d $DBNAME -a -f 'modules/database/db_setup.sql'
