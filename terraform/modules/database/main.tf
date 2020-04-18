@@ -43,9 +43,8 @@ resource "null_resource" "setup_db" {
     always_run = "${timestamp()}"
   }	
   provisioner "local-exec" {
-      #command = "./${path.module}/db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"	
       interpreter = ["sh"]
-      command = "./${path.module}/db_setup.sh"
+      command = "./${path.module}/db_setup.sh ${aws_rds_cluster.rds_cluster.endpoint} ${aws_rds_cluster.rds_cluster.database_name} ${aws_rds_cluster.rds_cluster.master_username}"
       environment = {	
           PGPASSWORD = "${var.password}"	
         }	
