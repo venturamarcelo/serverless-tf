@@ -3,7 +3,8 @@ FROM circleci/python
 USER root
 
 RUN apt-get update -y && \
-    apt-get install wget -y 
+    apt-get install wget -y && \
+    apt-get install postgresql-client -y
 
 # Install aws cli + bump2version
 RUN pip install awscli bump2version --upgrade --user
