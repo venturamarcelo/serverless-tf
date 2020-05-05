@@ -3,7 +3,7 @@ version: 2
 jobs:
     build:
       docker:
-        - image: hashicorp/terraform:light
+        - image: venturamarcelo/circleci
       steps:
         - checkout
         - run:
@@ -24,7 +24,7 @@ jobs:
 
     versioning:
       docker:
-        - image: python:latest
+        - image: venturamarcelo/circleci
       steps:
         - checkout
         - run:
@@ -39,7 +39,7 @@ jobs:
 
     deploy_feature:
       docker:
-        - image: hashicorp/terraform:light
+        - image: venturamarcelo/circleci
       steps:
         - checkout
         - run:
@@ -70,7 +70,7 @@ jobs:
 
     deploy_qa:
       docker:
-        - image: hashicorp/terraform:light
+        - image: venturamarcelo/circleci
       steps:
         - checkout
         - run:
@@ -101,7 +101,7 @@ jobs:
               
     deploy_prod:
       docker:
-        - image: hashicorp/terraform:light
+        - image: venturamarcelo/circleci
       steps:
         - checkout
         - run:
@@ -132,7 +132,7 @@ jobs:
 
     destroy:
       docker:
-        - image: hashicorp/terraform:light
+        - image: venturamarcelo/circleci
       steps:
         - checkout
         - run: 
