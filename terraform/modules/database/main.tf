@@ -51,11 +51,8 @@ resource "null_resource" "setup_db" {
   }	
   provisioner "local-exec" {
       interpreter = ["sh"]
-      command = "./${path.module}/db_setup.sh"
+      command = "psql -U ${aws_rds_cluster.rds_cluster.master_username} -h ${aws_rds_cluster.rds_cluster.endpoint} -d ${aws_rds_cluster.rds_cluster.database_name} -a -f 'modules/database/db_setup.sql'"
       environment = {
-          HOST = "${aws_rds_cluster.rds_cluster.endpoint}"
-          DBNAME = "${aws_rds_cluster.rds_cluster.database_name}"
-          USERNAME = "${aws_rds_cluster.rds_cluster.master_username}"	
           PGPASSWORD = "${var.password}"	
         }	
     }	
