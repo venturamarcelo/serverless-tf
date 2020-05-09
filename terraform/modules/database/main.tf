@@ -7,7 +7,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   engine = "${var.engine}"
 }
 resource "aws_rds_cluster" "rds_cluster" {
-  cluster_identifier      = "${var.dbInstanceIdentifier}-${local.cleansuffix}"
+  cluster_identifier      = "${var.dbInstanceIdentifier}${local.cleansuffix}"
   engine                  = "${var.engine}"
   availability_zones      = ["us-west-2a", "us-west-2b", "us-west-2c"]
   database_name           = "${var.database_name}${local.cleansuffix}"
