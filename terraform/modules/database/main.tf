@@ -50,7 +50,6 @@ resource "null_resource" "setup_db" {
     always_run = "${timestamp()}"
   }	
   provisioner "local-exec" {
-      interpreter = ["bash"]
       command = "psql -U ${aws_rds_cluster.rds_cluster.master_username} -h ${aws_rds_cluster.rds_cluster.endpoint} -d ${aws_rds_cluster.rds_cluster.database_name} -a -f modules/database/db_setup.sql"
       environment = {
           PGPASSWORD = "${var.password}"	
