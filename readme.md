@@ -18,3 +18,7 @@ terraform deploy
 The best way to see the behavior is sending a sns message ot the main topic with the following message atribute:
 
 [Event: Trigger Uno]
+
+## To do
+
+- Link database
